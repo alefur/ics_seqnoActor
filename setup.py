@@ -5,7 +5,7 @@ import sdss3tools
 import os
 
 sdss3tools.setup(
-    name = 'ics_gingaActor',
+    name = 'ics_seqnoActor',
     description = "Toy SDSS-3 actor.",
     )
 

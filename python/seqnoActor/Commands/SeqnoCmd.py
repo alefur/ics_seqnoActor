@@ -15,7 +15,8 @@ class SeqnoCmd(object):
         #
         self.vocab = [
             ('ping', '', self.ping),
-            ('status', '', self.status)
+            ('status', '', self.status),
+            ('getVisit', '', self.getVisit),
         ]
 
         # Define typed command arguments for the above commands.
@@ -34,3 +35,18 @@ class SeqnoCmd(object):
         cmd.inform('text="Present!"')
         cmd.finish()
 
+
+    def getVisit(self, cmd):
+        """ Query for a new PFS visit from Gen2.
+
+        This is slightly tricky. OCS allocates 8-digit IDs for single
+        image types, but we have four image types (PFS[ABCD]) and only
+        want 6-digits of ID.
+
+        So we
+
+        """
+
+        visit = self.actor.getPfsVisit()
+
+        cmd.finish('visit=%d' % visit)
