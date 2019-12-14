@@ -1,6 +1,6 @@
 setupRequired(tron_actorcore)
 
-setupRequired(ics_xcu_fpga    -j 70.4.2)
+setupRequired(ics_xcu_fpga)
 
 
 pathPrepend(PATH, ${PRODUCT_DIR}/bin)
