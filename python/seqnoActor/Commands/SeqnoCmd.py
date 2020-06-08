@@ -16,12 +16,13 @@ class SeqnoCmd(object):
         self.vocab = [
             ('ping', '', self.ping),
             ('status', '', self.status),
-            ('getVisit', '', self.getVisit),
+            ('getVisit', '[<description>]', self.getVisit),
         ]
 
         # Define typed command arguments for the above commands.
         self.keys = keys.KeysDictionary("seqno_seqno", (1, 1),
                                         keys.Key("text", types.String(), help=""),
+                                        keys.Key("description", types.String(), help=""),
                                         )
 
     def ping(self, cmd):
@@ -46,7 +47,8 @@ class SeqnoCmd(object):
         So we
 
         """
-
-        visit = self.actor.getPfsVisit()
+        cmdKeys = cmd.cmd.keywords
+        description = cmdKeys['description'].values[0] if 'description' in cmdKeys else ''
+        visit = self.actor.getPfsVisit(description=description)
 
         cmd.finish('visit=%d' % visit)
