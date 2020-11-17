@@ -2,9 +2,7 @@
 import logging
 
 from actorcore.Actor import Actor
-from opdb import utils, opdb
-from pfscore import SeqPath
-import pandas as pd
+
 
 class OurActor(Actor):
     def __init__(self, name, productName=None, configFile=None, logLevel=logging.INFO):
@@ -13,14 +11,8 @@ class OurActor(Actor):
 
         Actor.__init__(self, name,
                        productName=productName,
-                       configFile=configFile)
-
-    def getPfsVisit(self, description=''):
-        fileMgr = SeqPath.NightFilenameGen(self.config.get(self.name, 'rootDir'))
-        visit = int(fileMgr.consumeNextSeqno())
-        utils.insert(opdb.OpDB.url, 'pfs_visit',
-                     pd.DataFrame(dict(pfs_visit_id=visit, pfs_visit_description=description), index=[0]))
-        return visit
+                       configFile=configFile,
+                       modelNames=('gen2', 'mcs', 'iic', 'fps', 'sps', 'dcb'), )
 
 
 def main():
