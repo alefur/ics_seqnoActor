@@ -89,7 +89,7 @@ class SeqnoCmd(object):
             fileMgr = SeqPath.NightFilenameGen(config.get('gen2', 'rootDir'))
             return int(fileMgr.consumeNextSeqno())
 
-        caller = cmd.cmd.keywords['caller'] if 'caller' in cmd.cmd.keywords else cmd.cmdr
+        caller = str(cmd.cmd.keywords['caller'].values[0]) if 'caller' in cmd.cmd.keywords else None
 
         visit = getPfsVisit(self.actor.config)
         try:
