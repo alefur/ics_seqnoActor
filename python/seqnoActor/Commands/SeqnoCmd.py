@@ -2,7 +2,7 @@
 
 import opscore.protocols.keys as keys
 import opscore.protocols.types as types
-from pfs.utils import opdb
+from ics.utils import opdb
 from pfscore import SeqPath
 
 
@@ -19,7 +19,7 @@ class SeqnoCmd(object):
         self.vocab = [
             ('ping', '', self.ping),
             ('status', '', self.status),
-            ('getVisit', '[<caller>]', self.getVisit),
+            ('getVisit', '[<caller>] [<designId>]', self.getVisit),
         ]
 
         # Define typed command arguments for the above commands.
@@ -27,6 +27,7 @@ class SeqnoCmd(object):
                                         keys.Key("text", types.String(), help=""),
                                         keys.Key("caller", types.String(),
                                                  help='who should be listed as requesting a visit.'),
+                                        keys.Key("designId", types.Long(), help="PFS design ID"),
                                         )
 
     def ping(self, cmd):
@@ -47,13 +48,26 @@ class SeqnoCmd(object):
         is done, switch to the IIC key.
 
         """
-        dcbModel = self.actor.models['dcb'].keyVarDict
-        iicModel = self.actor.models['iic'].keyVarDict
+        cmdKeys = cmd.cmd.keywords
 
-        if 'designId' in iicModel:
-            cmd.warn('text="IIC knows about designIds, but we are forcing the DCB version."')
+        if 'designId' in cmdKeys:
+            designId = cmdKeys['designId'].values[0]
 
-        designId = dcbModel['designId'].getValue()
+        else:
+            cmd.inform('text="getting designId from model"')
+
+            dcbModel = self.actor.models['dcb'].keyVarDict
+            iicModel = self.actor.models['iic'].keyVarDict
+
+            if 'designId' in iicModel:
+                designId = iicModel['designId'].getValue()
+
+            elif 'designId' in dcbModel:
+                designId = dcbModel['designId'].getValue()
+
+            else:
+                raise RuntimeError('well, let set it to invalid then...')
+
         designId = int(designId)  # The Long() opscore type yields 0x12345678 values.
         return designId
 
