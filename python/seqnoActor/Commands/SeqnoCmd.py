@@ -20,6 +20,8 @@ class SeqnoCmd(object):
             ('ping', '', self.ping),
             ('status', '', self.status),
             ('getVisit', '[<caller>] [<designId>]', self.getVisit),
+            ('updateTelStatus', '[<caller>]', self.updateTelStatus),
+
         ]
 
         # Define typed command arguments for the above commands.
@@ -106,3 +108,28 @@ class SeqnoCmd(object):
             cmd.warn('text="failed to insert into pfs_visit: %s"' % (e))
 
         cmd.finish('visit=%d' % (visit))
+
+    def updateTelStatus(self, cmd):
+        """Simulating gen2 status."""
+
+        cmd.inform("inst_ids=NAOJ,Subaru,PFS")
+        cmd.inform("program=#,SPEC_ENG,Standby,None")
+        cmd.inform("object=YAMASHITA4,21:35:13.354,+19:43:55.600,21:35:13.354,+19:43:55.600")
+        cmd.inform("pointing=19:14:00.000,-21:40:00.000")
+        cmd.inform("offsets=0.0000,0.0000")
+        cmd.inform("coordinate_system_ids=FK5,180.0,2000.0")
+        cmd.inform("tel_axes=89.9965,89.9186,0.08140674000000558,1.000")
+        cmd.inform("tel_rot=0.0,-0.000742")
+        cmd.inform("tel_focus=P_OPT2,PRIME,3.52")
+        cmd.inform("tel_adc=IN,0.0")
+        cmd.inform("dome_env=23.000,622.400,277.950,0.000")
+        cmd.inform("outside_env=21.200,622.400,278.250,4.500")
+        cmd.inform("m2=Opt,-0.000237,0.001034,-0.000425")
+        cmd.inform("m2rot=0.0028,-0.0018,-0.0020")
+        cmd.inform("pfuOffset=-1.800,-2.600,3.520")
+        cmd.inform('autoguider="OFF"')
+        cmd.inform('conditions=Fine,0.000,1.000')
+        cmd.inform("moon=-41.919,131.962,0.149")
+        cmd.inform('obsMethod="Classical"')
+
+        cmd.finish()
